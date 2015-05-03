@@ -25,9 +25,9 @@ fi
 if [ ! -f /usr/bin/ansible ]; then
   echo "Installing Ansible dependencies and Git."
   if [[ ! -z $YUM ]]; then
-    yum install -y git python python-devel wget libgmp
+    yum install -y git python python-devel wget libgmp gmp-devel
   elif [[ ! -z $APT_GET ]]; then
-    apt-get install -y git python python-dev wget libgmp
+    apt-get install -y git python python-dev wget libgmp gmp-devel
   else
     echo "Neither yum nor apt-get are available."
     exit 1;
@@ -56,4 +56,4 @@ fi
 
 # Run the playbook.
 echo "Running Ansible provisioner defined in Vagrantfile."
-ansible-playbook -i 'localhost,' /vagrant/${ANSIBLE_PLAYBOOK} --extra-vars "is_windows=true" --connection=local
+sudo ansible-playbook -i 'test,' /vagrant/${ANSIBLE_PLAYBOOK} --extra-vars "is_windows=true" --connection=local
