@@ -5,8 +5,8 @@ MACHINES = [
   {
     "id" => "test-centos01",
     "vm" => {
-      "box"     => "centos6.5",
-      "box_url" => "https://github.com/2creatives/vagrant-centos/releases/download/v6.5.1/centos65-x86_64-20131205.box"
+      "box"     => "centos6.5.3",
+      "box_url" => "https://github.com/2creatives/vagrant-centos/releases/download/v6.5.3/centos65-x86_64-20140116.box"
     }
   }
 ]
