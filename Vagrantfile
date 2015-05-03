@@ -21,13 +21,23 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  config.vm.provision :ansible do |ansible|
-    ansible.sudo = true
-    ansible.playbook = "vagrant.yml"
-    ansible.verbose = "v"
-    ansible.host_key_checking = false
+  require 'rbconfig'
+  is_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
+  if is_windows
+    # Provisioning configuration for shell script.
+    config.vm.provision "shell" do |sh|
+      sh.path = "windows.sh"
+      sh.args = "vagrant.yml"
+    end
+  else
+    config.vm.provision :ansible do |ansible|
+      ansible.sudo = true
+      ansible.playbook = "vagrant.yml"
+      ansible.verbose = "v"
+      ansible.host_key_checking = false
 
-    ansible.groups = ANSIBLE["groups"]
+      ansible.groups = ANSIBLE["groups"]
+    end
   end
 
   config.vm.provider "virtualbox" do |v|
