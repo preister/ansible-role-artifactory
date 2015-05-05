@@ -17,6 +17,7 @@
     var:  artifactory_download_url
 
 - name: "Get artifactory RPM"
+  sudo: true
   get_url:
     url:  "{{ artifactory_download_url }}"
     dest: "{{ artifactory_tmp_file }}"
