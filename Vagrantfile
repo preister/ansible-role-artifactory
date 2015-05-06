@@ -24,13 +24,27 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   require 'rbconfig'
   is_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
   if is_windows
-    # Provisioning configuration for shell script.
+	puts "Running on a Windows Host."
+	#ruby how to convert boolean to integer
+	#http://stackoverflow.com/questions/13537206/how-do-i-convert-boolean-values-to-integers
+	is_ansible_host = (system("where ansible-playbook >nul 2>&1") ? 1 : 0)
+  else
+    puts "Running on an Unix/Linux Host."
+	#ruby: how to check if executable exists
+	#http://stackoverflow.com/questions/2108727/which-in-ruby-checking-if-program-exists-in-path-from-ruby
+    is_ansible_host = (system("which ansible-playbook > /dev/null 2>&1") ? 1 : 0)
+  end
+  
+  if is_ansible_host
+	puts "No Ansible on Host, using guest ansible bootsrap."
+	# Provisioning configuration for shell script.
     config.vm.provision "shell" do |sh|
-      sh.path = "windows.sh"
+      sh.path = "ansible_local_bootstrap.sh"
       sh.args = "vagrant.yml"
     end
   else
-    config.vm.provision :ansible do |ansible|
+	puts "Found Ansible on Host."
+	config.vm.provision :ansible do |ansible|
       ansible.sudo = true
       ansible.playbook = "vagrant.yml"
       ansible.verbose = "v"
