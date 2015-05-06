@@ -21,6 +21,7 @@
   get_url:
     url:  "{{ artifactory_download_url }}"
     dest: "{{ artifactory_tmp_file }}"
+    timeout: 100
 
 
 - name: Install Artifactory RPM
